@@ -17,21 +17,21 @@ const Tbody = styled.tbody`
   tr:nth-of-type(odd) {
     background: ${({ theme }) => theme.surface};
   }
-
-  td {
-    padding: 1rem 0;
-
-    span {
-      color: ${({ theme }) => theme.danger};
-      display: block;
-      margin-top: 0.5rem;
-
-      @media (min-width: 640px) {
-        display: inline-block;
-        margin: 0 0 0 1rem;
-      }
-    }
-  }
 `
 
-export { Table, Thead, Tbody }
+const Td = styled.td`
+  padding: 1rem;
+  ${({ pointer }) =>
+    pointer &&
+    `
+    cursor: pointer;
+    `}
+`
+
+const Container = styled.div`
+  overflow-x: auto;
+  min-height: 20rem;
+  position: relative;
+`
+
+export { Table, Thead, Tbody, Td, Container }

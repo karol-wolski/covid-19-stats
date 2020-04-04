@@ -3,7 +3,6 @@ import FooterComponent from '../../components/footer/Footer'
 import Header from '../../components/header/Header'
 import SelectCountry from '../../components/selectCountry/SelectCountry'
 import TableCountries from '../../components/tableCountries/TableCountries'
-import TableComponent from '../../components/tableCountryHistory/TableCountryHistory'
 import Stats from '../../components/Stats/Stats'
 
 const Statistics = () => {
@@ -14,13 +13,14 @@ const Statistics = () => {
   }
   return (
     <>
-      <Header />
-      <SelectCountry handleCountryChange={handleCountryChange} />
+      <Header handleCountryChange={handleCountryChange} />
+      <SelectCountry
+        handleCountryChange={handleCountryChange}
+        selectCountry={country}
+      />
       <Stats localisation={country} />
-      {country === 'all' ? (
-        <TableCountries />
-      ) : (
-        <TableComponent localisation={country} />
+      {country === 'all' && (
+        <TableCountries handleCountryChange={handleCountryChange} />
       )}
       <FooterComponent />
     </>

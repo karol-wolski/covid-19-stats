@@ -3,6 +3,7 @@ import { Container, CasesGroup, Headline, LastUpdate } from './Stats.style'
 import Tile from '../tile/Tile'
 import Request from '../../helpers/RequestCovidApi'
 import DateTime from '../../helpers/DateTime'
+import replace from '../../helpers/replace'
 
 const GlobalStats = ({ localisation }) => {
   const [response, setResponse] = useState([])
@@ -28,7 +29,9 @@ const GlobalStats = ({ localisation }) => {
         response.map(({ country, cases, deaths, time }) => (
           <Container key={country}>
             <Headline>
-              {country === 'All' ? 'World stats' : `Stats for ${country}`}
+              {country === 'All'
+                ? 'World stats'
+                : `Stats for ${replace(country, '-', ' ', true)}`}
             </Headline>
             <LastUpdate>Last update: {DateTime(time)}</LastUpdate>
             <CasesGroup row="3">
