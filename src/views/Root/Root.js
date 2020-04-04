@@ -8,7 +8,7 @@ import Statistics from '../Statistics/Statistics'
 const Root = () => (
   <ThemeProvider theme={theme}>
     <GlobalStyle />
-    <BrowserRouter>
+    <BrowserRouter basename="covid-19-stats">
       <Route path="/" component={Statistics} exact />
     </BrowserRouter>
   </ThemeProvider>
