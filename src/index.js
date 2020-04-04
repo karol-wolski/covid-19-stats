@@ -1,16 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ThemeProvider } from 'styled-components'
-import App from './App'
-import GlobalStyle from './theme/GlobalStyle'
-import theme from './theme/DarkTheme'
+import Root from './views/Root/Root'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <App />
-    </ThemeProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
-)
+ReactDOM.render(<Root />, document.getElementById('root'))

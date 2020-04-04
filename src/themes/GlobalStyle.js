@@ -1,7 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -20,6 +19,9 @@ body {
   font-size: 1.6rem;
   background-color: ${({ theme }) => theme.bgSite};
   color: ${({ theme }) => theme.baseline1};
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 `
 
