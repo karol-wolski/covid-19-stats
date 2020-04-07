@@ -1,12 +1,12 @@
+const checkValue = param => (param < 10 ? `0${param}` : param)
+
 const DateTime = param => {
   const date = new Date(param)
-  const day = date.getDay()
-  const month = date.getMonth()
-  const year = date.getFullYear()
-  let hour = date.getHours()
-  hour = hour < 10 ? `0${hour}` : hour
-  let minutes = date.getMinutes()
-  minutes = minutes < 10 ? `0${minutes}` : minutes
+  const day = checkValue(date.getDate())
+  const month = checkValue(date.getMonth())
+  const year = checkValue(date.getFullYear())
+  const hour = checkValue(date.getHours())
+  const minutes = checkValue(date.getMinutes())
   return `${day}.${month}.${year} ${hour}:${minutes}`
 }
 
