@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react'
 import { Container, CasesGroup, Headline, LastUpdate } from './Stats.style'
 import Tile from '../tile/Tile'
 import Request from '../../helpers/RequestCovidApi'
-import DateTime from '../../helpers/DateTime'
+import { DateTime } from '../../helpers/DateTime'
 import replace from '../../helpers/replace'
+import fetchData from '../../helpers/fetchData'
+import Error from '../errors/Errors'
 
 const GlobalStats = ({ localisation }) => {
-  const [response, setResponse] = useState([])
+  const [data, setData] = useState([])
+  const [errors, setErrors] = useState()
+
   useEffect(() => {
-    async function fetchUrl() {
-      try {
-        const res = await Request(`/statistics?country=${localisation}`)
-        const json = await res.json()
-        setResponse(json.response)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetchUrl()
+    fetchData(
+      `/statistics?country=${localisation}`,
+      Request,
+      setData,
+      setErrors
+    )
   }, [localisation])
 
   const setCorrectValue = param =>
@@ -25,8 +25,13 @@ const GlobalStats = ({ localisation }) => {
 
   return (
     <>
-      {response &&
-        response.map(({ country, cases, deaths, time }) => (
+      {errors && (
+        <Error>
+          An error has occurred from the server, please come back later.
+        </Error>
+      )}
+      {data.response &&
+        data.response.map(({ country, cases, deaths, time }) => (
           <Container key={country}>
             <Headline>
               {country === 'All'

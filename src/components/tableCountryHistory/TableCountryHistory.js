@@ -7,28 +7,23 @@ import {
   Wrapper,
 } from './TableCountryHistory.style'
 import Request from '../../helpers/RequestCovidApi'
+import fetchData from '../../helpers/fetchData'
+import Error from '../errors/Errors'
+import { DayBack } from '../../helpers/DateTime'
 
 const TableComponent = ({ localisation }) => {
-  const [response, setResponse] = useState([])
+  const [data, setData] = useState([])
+  const [errors, setErrors] = useState()
   const [orderCountry, setOrderCountry] = useState(false)
   const [orderCases, setOrderCases] = useState(false)
   const [orderDeaths, setOrderDeaths] = useState(false)
   const [orderRecovered, setOrderRecovered] = useState(false)
   useEffect(() => {
-    async function fetchUrl() {
-      try {
-        const res = await Request(`/history?country=${localisation}`)
-        const json = await res.json()
-        setResponse(json.response)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetchUrl()
+    fetchData(`/history?country=${localisation}`, Request, setData, setErrors)
   }, [localisation])
 
   const sortTable = (what, order) => {
-    const temps = [...response]
+    const temps = [...data]
     if (what === 'date') {
       temps.sort((a, b) =>
         order
@@ -54,42 +49,50 @@ const TableComponent = ({ localisation }) => {
       )
       setOrderDeaths(!order)
     }
-    setResponse(temps)
+    setData(temps)
   }
 
   return (
     <Wrapper>
       <h3>Last 10 days</h3>
       <Container>
-        <Table>
-          <Thead>
-            <tr>
-              <th onClick={() => sortTable('date', orderCountry)}>Date</th>
-              <th onClick={() => sortTable('cases', orderCases)}>Cases</th>
-              <th onClick={() => sortTable('recovered', orderRecovered)}>
-                Recovered
-              </th>
-              <th onClick={() => sortTable('deaths', orderDeaths)}>Deaths</th>
-            </tr>
-          </Thead>
-          <Tbody>
-            {response &&
-              response
+        {errors && (
+          <Error>
+            An error has occurred from the server, please come back later.
+          </Error>
+        )}
+        {data.response && (
+          <Table>
+            <Thead>
+              <tr>
+                <th onClick={() => sortTable('date', orderCountry)}>Date</th>
+                <th onClick={() => sortTable('cases', orderCases)}>Cases</th>
+                <th onClick={() => sortTable('recovered', orderRecovered)}>
+                  Recovered
+                </th>
+                <th onClick={() => sortTable('deaths', orderDeaths)}>Deaths</th>
+              </tr>
+            </Thead>
+            <Tbody>
+              {data.response
+                .reverse()
                 .filter(
                   (res, index, self) =>
                     index === self.findIndex(s => s.day === res.day)
                 )
-                .filter((i, index) => index > 0 && index <= 10)
-                .map(({ day, cases, deaths }) => (
-                  <tr key={day}>
-                    <td>{day}</td>
+                .reverse()
+                .filter((i, index) => index < 10)
+                .map(({ time, cases, deaths }) => (
+                  <tr key={time}>
+                    <td>{DayBack(time, 1)}</td>
                     <td>{cases.total}</td>
                     <td>{cases.recovered}</td>
                     <td>{deaths.total}</td>
                   </tr>
                 ))}
-          </Tbody>
-        </Table>
+            </Tbody>
+          </Table>
+        )}
       </Container>
     </Wrapper>
   )

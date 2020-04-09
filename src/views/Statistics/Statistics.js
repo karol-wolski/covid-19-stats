@@ -4,6 +4,7 @@ import Header from '../../components/header/Header'
 import SelectCountry from '../../components/selectCountry/SelectCountry'
 import TableCountries from '../../components/tableCountries/TableCountries'
 import Stats from '../../components/Stats/Stats'
+import TableComponent from '../../components/tableCountryHistory/TableCountryHistory'
 
 const Statistics = () => {
   const [country, setCountry] = useState('all')
@@ -19,9 +20,12 @@ const Statistics = () => {
         selectCountry={country}
       />
       <Stats localisation={country} />
-      {country === 'all' && (
+      {country === 'all' ? (
         <TableCountries handleCountryChange={handleCountryChange} />
+      ) : (
+        <TableComponent localisation={country} />
       )}
+
       <FooterComponent />
     </>
   )

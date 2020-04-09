@@ -2,22 +2,17 @@ import React, { useEffect, useState } from 'react'
 import Select from './SelectCountry.style'
 import Request from '../../helpers/RequestCovidApi'
 import replace from '../../helpers/replace'
+import fetchData from '../../helpers/fetchData'
+import Error from '../errors/Errors'
 
 const SelectCountry = props => {
   const { handleCountryChange, selectCountry } = props
   const [countries, setCountries] = useState([])
+  const [errors, setErrors] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState()
+
   useEffect(() => {
-    async function fetchUrl() {
-      try {
-        const response = await Request(`/countries`)
-        const json = await response.json()
-        setCountries(json.response)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetchUrl()
+    fetchData('/countries', Request, setCountries, setErrors)
   }, [])
 
   useEffect(() => {
@@ -32,11 +27,11 @@ const SelectCountry = props => {
         id="countries"
         onInput={event => handleCountryChange(event.target.value)}
         value={selectedCountry}>
-        <option key="select" value="Select-Country">
+        <option key="select" value="all">
           Select Country
         </option>
-        {countries &&
-          countries.map(
+        {countries.response &&
+          countries.response.map(
             country =>
               country !== 'all' && (
                 <option key={country} value={country}>
@@ -45,6 +40,11 @@ const SelectCountry = props => {
               )
           )}
       </Select>
+      {errors && (
+        <Error>
+          An error has occurred from the server, please come back later.
+        </Error>
+      )}
     </div>
   )
 }

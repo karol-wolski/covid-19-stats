@@ -3,30 +3,23 @@ import { Table, Thead, Tbody, Td, Container } from './TableCountries.style'
 import Request from '../../helpers/RequestCovidApi'
 import replace from '../../helpers/replace'
 import LoaderComponent from '../Loader/Loader'
+import fetchData from '../../helpers/fetchData'
+import Error from '../errors/Errors'
 
 const TableComponent = ({ handleCountryChange }) => {
-  const [response, setResponse] = useState([])
+  const [data, setData] = useState([])
   const [orderCountry, setOrderCountry] = useState(false)
   const [orderCases, setOrderCases] = useState(false)
   const [orderDeaths, setOrderDeaths] = useState(false)
   const [orderRecovered, setOrderRecovered] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [errors, setErrors] = useState(false)
   useEffect(() => {
-    async function fetchUrl() {
-      try {
-        const res = await Request(`/statistics`)
-        const json = await res.json()
-        setResponse(json.response)
-        setLoading(false)
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    fetchUrl()
+    fetchData('/statistics', Request, setData, setErrors, setLoading)
   }, [])
 
   const sortTable = (what, order) => {
-    const temps = [...response]
+    const temps = [...data.response]
     if (what === 'country') {
       temps.sort((a, b) =>
         order
@@ -52,26 +45,33 @@ const TableComponent = ({ handleCountryChange }) => {
       )
       setOrderDeaths(!order)
     }
-    setResponse(temps)
+    setData(temps)
   }
 
   return (
     <Container>
       {loading && <LoaderComponent />}
-      <Table>
-        <Thead>
-          <tr>
-            <th onClick={() => sortTable('country', orderCountry)}>Country</th>
-            <th onClick={() => sortTable('cases', orderCases)}>Cases</th>
-            <th onClick={() => sortTable('recovered', orderRecovered)}>
-              Recovered
-            </th>
-            <th onClick={() => sortTable('deaths', orderDeaths)}>Deaths</th>
-          </tr>
-        </Thead>
-        <Tbody>
-          {response &&
-            response.map(
+      {errors && (
+        <Error>
+          An error has occurred from the server, please come back later.
+        </Error>
+      )}
+      {data.response && (
+        <Table>
+          <Thead>
+            <tr>
+              <th onClick={() => sortTable('country', orderCountry)}>
+                Country
+              </th>
+              <th onClick={() => sortTable('cases', orderCases)}>Cases</th>
+              <th onClick={() => sortTable('recovered', orderRecovered)}>
+                Recovered
+              </th>
+              <th onClick={() => sortTable('deaths', orderDeaths)}>Deaths</th>
+            </tr>
+          </Thead>
+          <Tbody>
+            {data.response.map(
               ({ country, cases, deaths }) =>
                 country !== 'All' && (
                   <tr key={country}>
@@ -88,8 +88,9 @@ const TableComponent = ({ handleCountryChange }) => {
                   </tr>
                 )
             )}
-        </Tbody>
-      </Table>
+          </Tbody>
+        </Table>
+      )}
     </Container>
   )
 }
