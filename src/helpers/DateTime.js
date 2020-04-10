@@ -3,7 +3,7 @@ const checkValue = param => (param < 10 ? `0${param}` : param)
 export const DateTime = param => {
   const date = new Date(param)
   const day = checkValue(date.getDate())
-  const month = checkValue(date.getMonth())
+  const month = checkValue(date.getMonth() + 1)
   const year = checkValue(date.getFullYear())
   const hour = checkValue(date.getHours())
   const minutes = checkValue(date.getMinutes())
@@ -14,7 +14,7 @@ export const DayBack = (date, back) => {
   const d = new Date(date)
   d.setDate(d.getDate() - back)
   const day = checkValue(d.getDate())
-  const month = checkValue(d.getMonth())
+  const month = checkValue(d.getMonth() + 1)
   const year = checkValue(d.getFullYear())
   return `${day}.${month}.${year}`
 }
