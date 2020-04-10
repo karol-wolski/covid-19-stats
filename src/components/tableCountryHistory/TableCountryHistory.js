@@ -23,26 +23,26 @@ const TableComponent = ({ localisation }) => {
   }, [localisation])
 
   const sortTable = (what, order) => {
-    const temps = [...data]
+    const temps = data
     if (what === 'date') {
-      temps.sort((a, b) =>
+      temps.response.sort((a, b) =>
         order
           ? new Date(a.day).getTime() - new Date(b.day).getTime()
           : new Date(b.day).getTime() - new Date(a.day).getTime()
       )
       setOrderCountry(!order)
     } else if (what === 'cases') {
-      temps.sort((a, b) =>
+      temps.response.sort((a, b) =>
         order ? a.cases.total - b.cases.total : b.cases.total - a.cases.total
       )
       setOrderCases(!order)
     } else if (what === 'recovered') {
-      temps.sort((a, b) =>
+      temps.response.sort((a, b) =>
         order ? a.cases.total - b.cases.total : b.cases.total - a.cases.total
       )
       setOrderRecovered(!order)
     } else if (what === 'deaths') {
-      temps.sort((a, b) =>
+      temps.response.sort((a, b) =>
         order
           ? a.deaths.total - b.deaths.total
           : b.deaths.total - a.deaths.total

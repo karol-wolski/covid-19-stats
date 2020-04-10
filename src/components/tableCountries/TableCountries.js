@@ -19,26 +19,26 @@ const TableComponent = ({ handleCountryChange }) => {
   }, [])
 
   const sortTable = (what, order) => {
-    const temps = [...data.response]
+    const temps = data
     if (what === 'country') {
-      temps.sort((a, b) =>
+      temps.response.sort((a, b) =>
         order
           ? a.country.charCodeAt(0) - b.country.charCodeAt(0)
           : b.country.charCodeAt(0) - a.country.charCodeAt(0)
       )
       setOrderCountry(!order)
     } else if (what === 'cases') {
-      temps.sort((a, b) =>
+      temps.response.sort((a, b) =>
         order ? a.cases.total - b.cases.total : b.cases.total - a.cases.total
       )
       setOrderCases(!order)
     } else if (what === 'recovered') {
-      temps.sort((a, b) =>
+      temps.response.sort((a, b) =>
         order ? a.cases.total - b.cases.total : b.cases.total - a.cases.total
       )
       setOrderRecovered(!order)
     } else if (what === 'deaths') {
-      temps.sort((a, b) =>
+      temps.response.sort((a, b) =>
         order
           ? a.deaths.total - b.deaths.total
           : b.deaths.total - a.deaths.total
