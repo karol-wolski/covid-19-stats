@@ -10,6 +10,7 @@ const HeaderComponent = ({ children, handleCountryChange }) => {
           Covid-19 Statistics
         </Link>
       </h1>
+
       {children}
     </Header>
   )

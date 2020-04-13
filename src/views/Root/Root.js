@@ -1,17 +1,18 @@
 import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
-import { ThemeProvider } from 'styled-components'
 import GlobalStyle from '../../themes/GlobalStyle'
-import theme from '../../themes/DarkTheme'
 import Statistics from '../Statistics/Statistics'
+import { ThemeProviderWrapper } from '../../context/ThemeContext'
 
-const Root = () => (
-  <ThemeProvider theme={theme}>
-    <GlobalStyle />
-    <BrowserRouter basename="covid-19-stats">
-      <Route path="/" component={Statistics} exact />
-    </BrowserRouter>
-  </ThemeProvider>
-)
+const Root = () => {
+  return (
+    <ThemeProviderWrapper>
+      <GlobalStyle />
+      <BrowserRouter basename="covid-19-stats">
+        <Route path="/" component={Statistics} exact />
+      </BrowserRouter>
+    </ThemeProviderWrapper>
+  )
+}
 
 export default Root
