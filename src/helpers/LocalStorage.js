@@ -1,8 +1,7 @@
-export const saveObjectToLocalStorage = (name, obj) =>
+export const saveToLocalStorage = (name, obj) =>
   localStorage.setItem(name, JSON.stringify(obj))
 
-export const getObjectFromLocalStorage = name =>
+export const getFromLocalStorage = name =>
   JSON.parse(localStorage.getItem(name))
 
-export const removeObjectFromLocalStorage = name =>
-  localStorage.removeItem(name)
+export const removeFromLocalStorage = name => localStorage.removeItem(name)

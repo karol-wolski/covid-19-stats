@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { ThemeContext } from '../../context/ThemeContext'
 import { Toggle, Label } from './ToggleTheme.style'
 
@@ -7,7 +8,9 @@ const ToggleTheme = () => {
   const statement = mode === 'dark' ? 'light' : 'dark'
   return (
     <>
-      <Label htmlFor="themeToggle">Set theme</Label>
+      <Label htmlFor="themeToggle">
+        <FormattedMessage id="chooseTheme" defaultMessage="Choose theme" />
+      </Label>
       <Toggle
         id="themeToggle"
         active={mode}

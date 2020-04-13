@@ -18,6 +18,15 @@ const Div = styled.div`
   `}
 `
 
+const H3 = styled.h3`
+  font-weight: 700;
+  font-size: 2.8rem;
+`
+
+const H4 = styled.h4`
+  font-size: 1.87rem;
+`
+
 const Paragraph = styled.p`
   font-weight: 700;
   font-size: 2.8rem;
@@ -31,4 +40,4 @@ const Paragraph = styled.p`
     return theme.baseline1
   }};
 `
-export { Div, Paragraph }
+export { Div, Paragraph, H3, H4 }

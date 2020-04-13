@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { FormattedMessage, FormattedNumber, FormattedDate } from 'react-intl'
 import {
   Table,
   Thead,
@@ -38,7 +39,9 @@ const TableComponent = ({ localisation }) => {
       setOrderCases(!order)
     } else if (what === 'recovered') {
       temps.response.sort((a, b) =>
-        order ? a.cases.total - b.cases.total : b.cases.total - a.cases.total
+        order
+          ? a.cases.recovered - b.cases.recovered
+          : b.cases.recovered - a.cases.recovered
       )
       setOrderRecovered(!order)
     } else if (what === 'deaths') {
@@ -54,23 +57,40 @@ const TableComponent = ({ localisation }) => {
 
   return (
     <Wrapper>
-      <h3>Last 10 days</h3>
+      <h3>
+        <FormattedMessage
+          id="lastDays"
+          defaultMessage="Last {number} days"
+          values={{
+            number: '10',
+          }}
+        />
+      </h3>
       <Container>
         {errors && (
           <Error>
-            An error has occurred from the server, please come back later.
+            <FormattedMessage
+              id="errorServer"
+              defaultMessage="An error has occurred from the server, please come back later."
+            />
           </Error>
         )}
         {data.response && (
           <Table>
             <Thead>
               <tr>
-                <th onClick={() => sortTable('date', orderCountry)}>Date</th>
-                <th onClick={() => sortTable('cases', orderCases)}>Cases</th>
-                <th onClick={() => sortTable('recovered', orderRecovered)}>
-                  Recovered
+                <th onClick={() => sortTable('date', orderCountry)}>
+                  <FormattedMessage id="date" defaultMessage="Date" />
                 </th>
-                <th onClick={() => sortTable('deaths', orderDeaths)}>Deaths</th>
+                <th onClick={() => sortTable('cases', orderCases)}>
+                  <FormattedMessage id="cases" defaultMessage="Cases" />
+                </th>
+                <th onClick={() => sortTable('recovered', orderRecovered)}>
+                  <FormattedMessage id="recovered" defaultMessage="Recovered" />
+                </th>
+                <th onClick={() => sortTable('deaths', orderDeaths)}>
+                  <FormattedMessage id="deaths" defaultMessage="Deaths" />
+                </th>
               </tr>
             </Thead>
             <Tbody>
@@ -84,10 +104,18 @@ const TableComponent = ({ localisation }) => {
                 .filter((i, index) => index < 10)
                 .map(({ time, cases, deaths }) => (
                   <tr key={time}>
-                    <td>{DayBack(time, 1)}</td>
-                    <td>{cases.total}</td>
-                    <td>{cases.recovered}</td>
-                    <td>{deaths.total}</td>
+                    <td>
+                      <FormattedDate value={DayBack(time, 1)} />
+                    </td>
+                    <td>
+                      <FormattedNumber value={cases.total} />
+                    </td>
+                    <td>
+                      <FormattedNumber value={cases.recovered} />
+                    </td>
+                    <td>
+                      <FormattedNumber value={deaths.total} />
+                    </td>
                   </tr>
                 ))}
             </Tbody>
