@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 import Select from './SelectCountry.style'
 import Request from '../../helpers/RequestCovidApi'
 import replace from '../../helpers/replace'
@@ -27,22 +28,36 @@ const SelectCountry = props => {
         id="countries"
         onInput={event => handleCountryChange(event.target.value)}
         value={selectedCountry}>
-        <option key="select" value="all">
-          Select Country
-        </option>
+        <FormattedMessage id="selectCountry" defaultMessage="Select Country">
+          {txt => (
+            <option key="select" value="all">
+              {txt}
+            </option>
+          )}
+        </FormattedMessage>
         {countries.response &&
           countries.response.map(
             country =>
               country !== 'all' && (
-                <option key={country} value={country}>
-                  {replace(country, '-', ' ', true)}
-                </option>
+                <FormattedMessage
+                  id={country}
+                  defaultMessage={country}
+                  key={country}>
+                  {msg => (
+                    <option value={country}>
+                      {replace(msg, '-', ' ', true)}
+                    </option>
+                  )}
+                </FormattedMessage>
               )
           )}
       </Select>
       {errors && (
         <Error>
-          An error has occurred from the server, please come back later.
+          <FormattedMessage
+            id="errorServer"
+            defaultMessage="An error has occurred from the server, please come back later."
+          />
         </Error>
       )}
     </div>

@@ -5,6 +5,7 @@ const Header = styled.header`
   align-items: center;
   justify-content: space-between;
   height: 5rem;
+  margin: 1.5rem 0;
 
   h1 {
     font-size: 2.4rem;

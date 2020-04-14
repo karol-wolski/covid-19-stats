@@ -3,8 +3,8 @@ import { ThemeProvider } from 'styled-components'
 import LightTheme from '../themes/LightTheme'
 import DarkTheme from '../themes/DarkTheme'
 import {
-  saveObjectToLocalStorage,
-  getObjectFromLocalStorage,
+  saveToLocalStorage,
+  getFromLocalStorage,
 } from '../helpers/LocalStorage'
 
 const Context = createContext()
@@ -21,15 +21,15 @@ const themes = {
 }
 
 const ThemeProviderWrapper = ({ children }) => {
-  const localStorage = getObjectFromLocalStorage('theme')
+  const localStorage = getFromLocalStorage('theme')
   const [theme, setTheme] = useState({
-    mode: localStorage ? localStorage.mode : themes.dark.mode,
-    pallete: localStorage ? localStorage.pallete : themes.dark.pallete,
+    mode: localStorage ? themes[localStorage].mode : themes.dark.mode,
+    pallete: localStorage ? themes[localStorage].pallete : themes.dark.pallete,
     switchTo: param => setTheme({ ...theme, ...themes[param] }),
   })
 
   useEffect(() => {
-    saveObjectToLocalStorage('theme', theme)
+    saveToLocalStorage('theme', theme.mode)
   }, [theme])
 
   const { pallete } = theme

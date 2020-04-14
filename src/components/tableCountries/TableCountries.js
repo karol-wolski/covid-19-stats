@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { FormattedMessage, FormattedNumber } from 'react-intl'
 import { Table, Thead, Tbody, Td, Container } from './TableCountries.style'
 import Request from '../../helpers/RequestCovidApi'
 import replace from '../../helpers/replace'
@@ -34,7 +35,9 @@ const TableComponent = ({ handleCountryChange }) => {
       setOrderCases(!order)
     } else if (what === 'recovered') {
       temps.response.sort((a, b) =>
-        order ? a.cases.total - b.cases.total : b.cases.total - a.cases.total
+        order
+          ? a.cases.recovered - b.cases.recovered
+          : b.cases.recovered - a.cases.recovered
       )
       setOrderRecovered(!order)
     } else if (what === 'deaths') {
@@ -53,7 +56,10 @@ const TableComponent = ({ handleCountryChange }) => {
       {loading && <LoaderComponent />}
       {errors && (
         <Error>
-          An error has occurred from the server, please come back later.
+          <FormattedMessage
+            id="errorServer"
+            defaultMessage="An error has occurred from the server, please come back later."
+          />
         </Error>
       )}
       {data.response && (
@@ -61,13 +67,17 @@ const TableComponent = ({ handleCountryChange }) => {
           <Thead>
             <tr>
               <th onClick={() => sortTable('country', orderCountry)}>
-                Country
+                <FormattedMessage id="country" defaultMessage="Country" />
               </th>
-              <th onClick={() => sortTable('cases', orderCases)}>Cases</th>
+              <th onClick={() => sortTable('cases', orderCases)}>
+                <FormattedMessage id="cases" defaultMessage="Cases" />
+              </th>
               <th onClick={() => sortTable('recovered', orderRecovered)}>
-                Recovered
+                <FormattedMessage id="recovered" defaultMessage="Recovered" />
               </th>
-              <th onClick={() => sortTable('deaths', orderDeaths)}>Deaths</th>
+              <th onClick={() => sortTable('deaths', orderDeaths)}>
+                <FormattedMessage id="deaths" defaultMessage="Deaths" />
+              </th>
             </tr>
           </Thead>
           <Tbody>
@@ -80,11 +90,19 @@ const TableComponent = ({ handleCountryChange }) => {
                       role="gridcell"
                       onClick={() => handleCountryChange(country)}
                       onKeyPress={() => handleCountryChange(country)}>
-                      {replace(country, '-', ' ', true)}
+                      <FormattedMessage id={country} defaultMessage={country}>
+                        {txt => replace(txt, '-', ' ', true)}
+                      </FormattedMessage>
                     </Td>
-                    <Td>{cases.total}</Td>
-                    <Td>{cases.recovered}</Td>
-                    <Td>{deaths.total}</Td>
+                    <Td>
+                      <FormattedNumber value={cases.total} />
+                    </Td>
+                    <Td>
+                      <FormattedNumber value={cases.recovered} />
+                    </Td>
+                    <Td>
+                      <FormattedNumber value={deaths.total} />
+                    </Td>
                   </tr>
                 )
             )}

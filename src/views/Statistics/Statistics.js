@@ -5,7 +5,7 @@ import SelectCountry from '../../components/selectCountry/SelectCountry'
 import TableCountries from '../../components/tableCountries/TableCountries'
 import Stats from '../../components/Stats/Stats'
 import TableComponent from '../../components/tableCountryHistory/TableCountryHistory'
-import ToggleTheme from '../../components/toggleTheme/ToggleTheme'
+import Navigation from '../../components/navigation/Navigation'
 
 const Statistics = () => {
   const [country, setCountry] = useState('all')
@@ -16,7 +16,7 @@ const Statistics = () => {
   return (
     <>
       <Header handleCountryChange={handleCountryChange}>
-        <ToggleTheme />
+        <Navigation />
       </Header>
       <SelectCountry
         handleCountryChange={handleCountryChange}
