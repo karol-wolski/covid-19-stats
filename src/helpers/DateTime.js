@@ -16,5 +16,5 @@ export const DayBack = (date, back) => {
   const day = checkValue(d.getDate())
   const month = checkValue(d.getMonth() + 1)
   const year = checkValue(d.getFullYear())
-  return `${month}.${day}.${year}`
+  return `${month}/${day}/${year}`
 }

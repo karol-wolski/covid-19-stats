@@ -6,6 +6,7 @@ import Stats from '../../components/Stats/Stats'
 import TableComponent from '../../components/tableCountryHistory/TableCountryHistory'
 import Navigation from '../../components/navigation/Navigation'
 import ToggleableCountriesContinentsStats from '../../components/toggleableCountriesContinentsStats/ToggleableCountriesContinentsStats'
+import HistoricalDataCharts from '../../components/historicalDataCharts/HistoricalDataCharts'
 
 const Statistics = () => {
   const [country, setCountry] = useState('all')
@@ -24,13 +25,14 @@ const Statistics = () => {
       />
       <Stats localisation={country} />
       {country === 'all' ? (
-        <>
-          <ToggleableCountriesContinentsStats
-            handleCountryChange={handleCountryChange}
-          />
-        </>
+        <ToggleableCountriesContinentsStats
+          handleCountryChange={handleCountryChange}
+        />
       ) : (
-        <TableComponent localisation={country} />
+        <>
+          <TableComponent localisation={country} />
+          <HistoricalDataCharts localisation={country} />
+        </>
       )}
 
       <FooterComponent />
