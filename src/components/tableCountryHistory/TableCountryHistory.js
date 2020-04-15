@@ -13,39 +13,76 @@ import Error from '../errors/Errors'
 import { DayBack } from '../../helpers/DateTime'
 
 const TableComponent = ({ localisation }) => {
+  const [response, setResponse] = useState([])
   const [data, setData] = useState([])
   const [errors, setErrors] = useState()
   const [orderCountry, setOrderCountry] = useState(false)
   const [orderCases, setOrderCases] = useState(false)
   const [orderDeaths, setOrderDeaths] = useState(false)
   const [orderRecovered, setOrderRecovered] = useState(false)
+  const numOfRecords = 11
+  const numOfRecordsToShow = 10
+
   useEffect(() => {
-    fetchData(`/history?country=${localisation}`, Request, setData, setErrors)
+    fetchData(
+      `/history?country=${localisation}`,
+      Request,
+      setResponse,
+      setErrors
+    )
   }, [localisation])
+
+  useEffect(() => {
+    if (typeof response.response !== 'undefined') {
+      const getFirstObjectWithEveryDay = response.response
+        .reverse()
+        .filter(
+          (res, index, self) => index === self.findIndex(s => s.day === res.day)
+        )
+        .reverse()
+
+      const sliceElementsWithArray = getFirstObjectWithEveryDay.slice(
+        0,
+        numOfRecords
+      )
+      const addFieldNewRecoveredToObject = sliceElementsWithArray
+      addFieldNewRecoveredToObject.reverse().map(({ cases }, index, arr) => {
+        if (index > 0)
+          addFieldNewRecoveredToObject[index].cases.recovered_new =
+            cases.recovered - arr[index - 1].cases.recovered
+        return addFieldNewRecoveredToObject
+      })
+
+      const reverseArray = addFieldNewRecoveredToObject.reverse()
+
+      const sliceElementToShow = reverseArray.slice(0, numOfRecordsToShow)
+      setData(sliceElementToShow)
+    }
+  }, [response])
 
   const sortTable = (what, order) => {
     const temps = data
     if (what === 'date') {
-      temps.response.sort((a, b) =>
+      temps.sort((a, b) =>
         order
           ? new Date(a.day).getTime() - new Date(b.day).getTime()
           : new Date(b.day).getTime() - new Date(a.day).getTime()
       )
       setOrderCountry(!order)
     } else if (what === 'cases') {
-      temps.response.sort((a, b) =>
+      temps.sort((a, b) =>
         order ? a.cases.total - b.cases.total : b.cases.total - a.cases.total
       )
       setOrderCases(!order)
     } else if (what === 'recovered') {
-      temps.response.sort((a, b) =>
+      temps.sort((a, b) =>
         order
           ? a.cases.recovered - b.cases.recovered
           : b.cases.recovered - a.cases.recovered
       )
       setOrderRecovered(!order)
     } else if (what === 'deaths') {
-      temps.response.sort((a, b) =>
+      temps.sort((a, b) =>
         order
           ? a.deaths.total - b.deaths.total
           : b.deaths.total - a.deaths.total
@@ -75,7 +112,7 @@ const TableComponent = ({ localisation }) => {
             />
           </Error>
         )}
-        {data.response && (
+        {response.response && (
           <Table>
             <Thead>
               <tr>
@@ -83,41 +120,60 @@ const TableComponent = ({ localisation }) => {
                   <FormattedMessage id="date" defaultMessage="Date" />
                 </th>
                 <th onClick={() => sortTable('cases', orderCases)}>
-                  <FormattedMessage id="cases" defaultMessage="Cases" />
+                  <FormattedMessage
+                    id="casesNew"
+                    defaultMessage="Cases (New)"
+                  />
                 </th>
                 <th onClick={() => sortTable('recovered', orderRecovered)}>
-                  <FormattedMessage id="recovered" defaultMessage="Recovered" />
+                  <FormattedMessage
+                    id="recoveredNew"
+                    defaultMessage="Recovered (New)"
+                  />
                 </th>
                 <th onClick={() => sortTable('deaths', orderDeaths)}>
-                  <FormattedMessage id="deaths" defaultMessage="Deaths" />
+                  <FormattedMessage
+                    id="deathsNew"
+                    defaultMessage="Deaths (New)"
+                  />
                 </th>
               </tr>
             </Thead>
             <Tbody>
-              {data.response
-                .reverse()
-                .filter(
-                  (res, index, self) =>
-                    index === self.findIndex(s => s.day === res.day)
-                )
-                .reverse()
-                .filter((i, index) => index < 10)
-                .map(({ time, cases, deaths }) => (
-                  <tr key={time}>
-                    <td>
-                      <FormattedDate value={DayBack(time, 1)} />
-                    </td>
-                    <td>
-                      <FormattedNumber value={cases.total} />
-                    </td>
-                    <td>
-                      <FormattedNumber value={cases.recovered} />
-                    </td>
-                    <td>
-                      <FormattedNumber value={deaths.total} />
-                    </td>
-                  </tr>
-                ))}
+              {data.map(({ time, cases, deaths }) => (
+                <tr key={time}>
+                  <td>
+                    <FormattedDate value={DayBack(time, 1)} />
+                  </td>
+                  <td>
+                    <FormattedNumber value={cases.total} />
+                    {cases.new !== null && (
+                      <span>
+                        {' '}
+                        (<FormattedNumber value={cases.new} />)
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    <FormattedNumber value={cases.recovered} />
+                    {cases.recovered_new !== 0 && (
+                      <span>
+                        {' '}
+                        (<FormattedNumber value={cases.recovered_new} />)
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    <FormattedNumber value={deaths.total} />
+                    {deaths.new !== null && (
+                      <span>
+                        {' '}
+                        (<FormattedNumber value={deaths.new} />)
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
             </Tbody>
           </Table>
         )}
