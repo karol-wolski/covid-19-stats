@@ -2,7 +2,7 @@ import React from 'react'
 import { FormattedMessage, FormattedNumber } from 'react-intl'
 import { Div, Paragraph, H3, H4 } from './Tile.style'
 
-const Tile = ({ title, value, type, rowAll, large }) => {
+const Tile = ({ title, value = 0, type, rowAll, large }) => {
   return (
     <Div rowAll={rowAll}>
       {large ? (
@@ -14,7 +14,7 @@ const Tile = ({ title, value, type, rowAll, large }) => {
           <FormattedMessage id={title} defaultMessage={title} />
         </H4>
       )}
-      {value && (
+      {!large && (
         <Paragraph type={type}>
           <FormattedNumber value={value} />
         </Paragraph>
