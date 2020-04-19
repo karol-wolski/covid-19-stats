@@ -1,7 +1,7 @@
 const theme = {
   danger: '#fb0404',
   success: '#43a047',
-  info: '#2b0ba8',
+  info: '#0064ff',
   baseline1: '#1f1f1f',
   baseline2: '#121212',
   bgSite: '#F6F6F6',

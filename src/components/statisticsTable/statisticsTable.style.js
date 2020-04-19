@@ -6,11 +6,9 @@ const Table = styled.table`
   text-align: center;
 `
 
-const Thead = styled.thead`
-  th {
-    padding: 1rem 0;
-    cursor: pointer;
-  }
+const Th = styled.th`
+  padding: 1rem 0;
+  cursor: ${({ isEvent }) => (isEvent ? 'pointer' : 'cursor')};
 `
 
 const Tbody = styled.tbody`
@@ -34,4 +32,4 @@ const Container = styled.div`
   position: relative;
 `
 
-export { Table, Thead, Tbody, Td, Container }
+export { Table, Th, Tbody, Td, Container }
