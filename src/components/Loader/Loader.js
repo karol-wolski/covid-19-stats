@@ -7,7 +7,7 @@ const LoaderComponent = () => {
   const theme = useContext(ThemeContext)
   return (
     <Wrapper>
-      <Loader type="ThreeDots" color={theme.baseline1} height={75} width={75} />
+      <Loader type="ThreeDots" color={theme.info} height={75} width={75} />
     </Wrapper>
   )
 }

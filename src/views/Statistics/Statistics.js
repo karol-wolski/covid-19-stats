@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import FooterComponent from '../../components/footer/Footer'
 import Header from '../../components/header/Header'
 import SelectCountry from '../../components/selectCountry/SelectCountry'
-import TableCountries from '../../components/tableCountries/TableCountries'
 import Stats from '../../components/Stats/Stats'
 import TableComponent from '../../components/tableCountryHistory/TableCountryHistory'
 import Navigation from '../../components/navigation/Navigation'
+import ToggleableCountriesContinentsStats from '../../components/toggleableCountriesContinentsStats/ToggleableCountriesContinentsStats'
 
 const Statistics = () => {
   const [country, setCountry] = useState('all')
@@ -24,7 +24,11 @@ const Statistics = () => {
       />
       <Stats localisation={country} />
       {country === 'all' ? (
-        <TableCountries handleCountryChange={handleCountryChange} />
+        <>
+          <ToggleableCountriesContinentsStats
+            handleCountryChange={handleCountryChange}
+          />
+        </>
       ) : (
         <TableComponent localisation={country} />
       )}
