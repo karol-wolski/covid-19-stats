@@ -13,7 +13,6 @@ const CasesGroup = styled.div`
   ${({ border, theme }) =>
     border &&
     `
-      border-top: 1px dashed;
       border-bottom: 1px dashed;
       border-color: ${theme.surface};
   `}

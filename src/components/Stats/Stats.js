@@ -34,7 +34,7 @@ const GlobalStats = ({ localisation }) => {
         </Error>
       )}
       {data.response &&
-        data.response.map(({ country, cases, deaths, time }) => (
+        data.response.map(({ country, cases, deaths, time, tests }) => (
           <Container key={country}>
             <Headline>
               {country === 'All' ? (
@@ -54,7 +54,7 @@ const GlobalStats = ({ localisation }) => {
               <FormattedMessage id="lastUpdate" defaultMessage="Last update" />{' '}
               <FormattedTime value={new Date(time)} />
             </LastUpdate>
-            <CasesGroup row="3">
+            <CasesGroup row="3" border>
               <Tile title="today" large rowAll />
               <Tile title="detected" value={setCorrectValue(cases.new)} />
               <Tile
@@ -68,11 +68,17 @@ const GlobalStats = ({ localisation }) => {
               <Tile title="detected" value={cases.total} />
               <Tile type="danger" title="deaths" value={deaths.total} />
             </CasesGroup>
-            <CasesGroup row="3">
+            <CasesGroup row="3" border={tests.total > 0}>
               <Tile title="cases" large rowAll />
               <Tile title="active" value={cases.active} />
               <Tile type="success" title="recovered" value={cases.recovered} />
             </CasesGroup>
+            {tests.total > 0 && (
+              <CasesGroup row="3">
+                <Tile title="tests" large rowAll />
+                <Tile title="total" value={tests.total} />
+              </CasesGroup>
+            )}
           </Container>
         ))}
     </>

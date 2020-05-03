@@ -6,6 +6,7 @@ import Stats from '../../components/Stats/Stats'
 import TableComponent from '../../components/tableCountryHistory/TableCountryHistory'
 import Navigation from '../../components/navigation/Navigation'
 import ToggleableCountriesContinentsStats from '../../components/toggleableCountriesContinentsStats/ToggleableCountriesContinentsStats'
+import CalculationOfData from '../../components/calculationOfData/CalculationOfData'
 
 const Statistics = () => {
   const [country, setCountry] = useState('all')
@@ -30,7 +31,10 @@ const Statistics = () => {
           />
         </>
       ) : (
-        <TableComponent localisation={country} />
+        <>
+          <CalculationOfData localisation={country} />
+          <TableComponent localisation={country} />
+        </>
       )}
 
       <FooterComponent />
